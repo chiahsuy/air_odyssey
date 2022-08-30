@@ -2,9 +2,12 @@ name: example-environment
 channels:
   - conda-forge
 dependencies:
+  - python
   - numpy
-  - matplotlib
-  - dill
-  - pandas
-  - seaborn
-  - sklearn
+  - pip
+  - pip:
+    - matplotlib
+    - dill
+    - pandas
+    - seaborn
+    - sklearn
