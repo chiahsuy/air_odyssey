@@ -60,8 +60,6 @@ hr_transformer = Pipeline(
            ]
 )
 
-
-
 feature_prep = ColumnTransformer(transformers = [('dep_month', mt_transformer , dep_time_col),
                                                  ('dep_wkday', wd_transformer , dep_time_col),
                                                  ('dep_hour', hr_transformer , dep_time_col),
@@ -72,39 +70,6 @@ feature_prep = ColumnTransformer(transformers = [('dep_month', mt_transformer , 
                                                  ('num', SimpleImputer(missing_values=np.nan, strategy='constant', fill_value = 0), dep_num_cols)
                                   ]
                   )
-
-# pipline for models to predict cancel or not (probabilty)
-linprob_cancel = Pipeline([("feature", feature_prep),
-                       ("logit", LogisticRegression())
-                      ])
-
-
-# pipline for models to predict cancel or not (probabilty)
-treeprob_cancel = Pipeline([("feature", feature_prep),
-                       ("tree", RandomForestClassifier(n_estimators = 10,
-                                                       min_samples_leaf = 60,
-                                                       #class_weight='balanced_subsample'
-                                                       ))
-                      ])
-
-# pipline for models to identify cancel or not (outlier or not: -1:cancel)
-tree_outlier = Pipeline([("feature", feature_prep),
-                       ("isotree", IsolationForest(max_samples="auto",
-                                                   contamination = 0.04,
-                                                   #random_state=1001
-                                                   ))
-                      ])
-
-
-# pipeline for models to predict how long delays (in minutes)
-tree_delay = Pipeline([("feature", feature_prep),
-                       ("tree", RandomForestRegressor(n_estimators = 25,
-                                                      min_samples_leaf = 30,
-                                                      max_depth= 300
-                                                      ))
-                      ])
-
-
 
 class LinResd_Regressor1(BaseEstimator, RegressorMixin):
     def __init__(self, linpred, respred):
